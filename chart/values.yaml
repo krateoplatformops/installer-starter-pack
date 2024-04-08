@@ -1,3 +1,3 @@
 krateoplatformops:
   init:
-    enabled: false
+    enabled: true
