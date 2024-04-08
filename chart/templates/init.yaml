@@ -37,7 +37,7 @@ spec:
   columnListRef:
     - name: three
       namespace: demo-system
-    - name: eleven
+    - name: one
       namespace: demo-system
 ---
 apiVersion: layout.ui.krateo.io/v1alpha1
@@ -56,7 +56,7 @@ spec:
 apiVersion: layout.ui.krateo.io/v1alpha1
 kind: Column
 metadata:
-  name: eleven
+  name: one
   namespace: demo-system
 spec:
   app:
@@ -64,8 +64,6 @@ spec:
       width: "12"
   cardTemplateListRef:
     - name: one
-      namespace: demo-system
-    - name: ten
       namespace: demo-system
 ---
 apiVersion: widgets.ui.krateo.io/v1alpha1
@@ -77,9 +75,8 @@ spec:
   app:
     icon: fa-solid fa-truck-fast
     color: green
-    title: ${ .api2.items[0] | (.name  + " -> " + .email) }
-    content: ${ .api2.items[0].body }
-    date: Sep 15th 2023 08:15:43
+    title: Fireworksapp Template
+    content: This template creates an instance of Fireworksapp composition
   formTemplateRef:
     name: fireworksapp
   api:
@@ -121,40 +118,6 @@ spec:
     path: "/products"
     endpointRef:
       name: dummyjson-endpoint
-      namespace: demo-system
-    verb: GET
-    headers:
-    - 'Accept: application/json'
----
-apiVersion: widgets.ui.krateo.io/v1alpha1
-kind: CardTemplate
-metadata:
-  name: ten
-  namespace: demo-system
-spec:
-  iterator: .api2.items[:10]
-  app:
-    icon: ${ "fa-solid fa-" + (.id|tostring)}
-    color: darkBlue
-    title: ${ .name }
-    content: ${ .body }
-    tags: { .email }
-  formTemplateRef:
-    name: fireworksapp
-  api:
-  - name: api1
-    path: "/todos/1"
-    endpointRef:
-      name: typicode-endpoint
-      namespace: demo-system
-    verb: GET
-    headers:
-    - 'Accept: application/json'
-  - name: api2
-    dependOn: api1
-    path: ${ "/todos/" + (.api1.id|tostring) +  "/comments" }
-    endpointRef:
-      name: typicode-endpoint
       namespace: demo-system
     verb: GET
     headers:
