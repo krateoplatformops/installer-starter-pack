@@ -13,9 +13,6 @@ kind: User
 metadata:
   name: cyberjoker
   namespace: krateo-system
-  annotations:
-    helm.sh/hook: post-install, post-upgrade
-    helm.sh/resource-policy: keep
 spec:
   displayName: Cyber Joker
   avatarURL: https://i.pravatar.cc/256?img=70
@@ -36,9 +33,6 @@ kind: Row
 metadata:
   name: two
   namespace: demo-system
-  annotations:
-    helm.sh/hook: post-install, post-upgrade
-    helm.sh/resource-policy: keep
 spec:
   columnListRef:
     - name: three
@@ -51,9 +45,6 @@ kind: Column
 metadata:
   name: three
   namespace: demo-system
-  annotations:
-    helm.sh/hook: post-install, post-upgrade
-    helm.sh/resource-policy: keep
 spec:
   app:
     props:
@@ -67,9 +58,6 @@ kind: Column
 metadata:
   name: eleven
   namespace: demo-system
-  annotations:
-    helm.sh/hook: post-install, post-upgrade
-    helm.sh/resource-policy: keep
 spec:
   app:
     props:
@@ -85,9 +73,6 @@ kind: CardTemplate
 metadata:
   name: one
   namespace: demo-system
-  annotations:
-    helm.sh/hook: post-install, post-upgrade
-    helm.sh/resource-policy: keep
 spec:
   app:
     icon: fa-solid fa-truck-fast
@@ -121,9 +106,6 @@ kind: CardTemplate
 metadata:
   name: three
   namespace: demo-system
-  annotations:
-    helm.sh/hook: post-install, post-upgrade
-    helm.sh/resource-policy: keep
 spec:
   iterator: .api1.products[:3]
   app:
@@ -149,9 +131,6 @@ kind: CardTemplate
 metadata:
   name: ten
   namespace: demo-system
-  annotations:
-    helm.sh/hook: post-install, post-upgrade
-    helm.sh/resource-policy: keep
 spec:
   iterator: .api2.items[:10]
   app:
@@ -321,9 +300,6 @@ kind: FormTemplate
 metadata:
   name: fireworksapp
   namespace: demo-system
-  annotations:
-    helm.sh/hook: post-install, post-upgrade
-    helm.sh/resource-policy: keep
 spec:
   schemaDefinitionRef:
     name: fireworksapp
@@ -360,9 +336,6 @@ subjects:
 apiVersion: core.krateo.io/v1alpha1
 kind: SchemaDefinition
 metadata:
-  annotations:
-    helm.sh/hook: post-install, post-upgrade
-    helm.sh/resource-policy: keep
   name: fireworksapp
   namespace: demo-system
 spec:
@@ -400,9 +373,6 @@ subjects:
 apiVersion: core.krateo.io/v1alpha1
 kind: CompositionDefinition
 metadata:
-  annotations:
-    helm.sh/hook: post-install, post-upgrade
-    helm.sh/resource-policy: keep
   name: fireworksapp
   namespace: demo-system
 spec:
