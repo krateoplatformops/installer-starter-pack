@@ -67,10 +67,10 @@ spec:
       namespace: demo-system
     - name: postgresql-tgz
       namespace: demo-system
-    - name: redis-oci
-      namespace: demo-system
-    - name: jenkins-repo
-      namespace: demo-system
+    # - name: redis-oci
+    #   namespace: demo-system
+    # - name: jenkins-repo
+    #   namespace: demo-system
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
@@ -180,7 +180,7 @@ spec:
     content: ${ .description }
     tags: ${ .brand }
   formTemplateRef:
-    name: fireworksapp
+    name: fireworksapp-tgz
   api:
   - name: api1
     path: "/products"
