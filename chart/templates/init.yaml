@@ -401,7 +401,7 @@ spec:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: compositions-viewer
+  name: compositions-admin
 rules:
 - apiGroups:
   - composition.krateo.io
@@ -410,15 +410,16 @@ rules:
   verbs:
   - get
   - list
+  - create
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: compositions-viewer
+  name: compositions-admin
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name:  compositions-viewer
+  name:  compositions-admin
 subjects:
 - kind: Group
   name: devs
