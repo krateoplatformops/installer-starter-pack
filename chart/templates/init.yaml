@@ -4,7 +4,7 @@ kind: Secret
 type: kubernetes.io/basic-auth
 metadata:
   name: cyberjoker-password
-  namespace: krateo-system
+  namespace: {{ .Release.Namespace }}
 stringData:
   password: "123456"
 ---
@@ -12,14 +12,14 @@ apiVersion: basic.authn.krateo.io/v1alpha1
 kind: User
 metadata:
   name: cyberjoker
-  namespace: krateo-system
+  namespace: {{ .Release.Namespace }}
 spec:
   displayName: Cyber Joker
   avatarURL: https://i.pravatar.cc/256?img=70
   groups:
     - devs
   passwordRef:
-    namespace: krateo-system
+    namespace: {{ .Release.Namespace }}
     name: cyberjoker-password
     key: password
 ---
