@@ -28,7 +28,7 @@ kind: Namespace
 metadata:
   name: demo-system
 ---
-apiVersion: layout.ui.krateo.io/v1alpha1
+apiVersion: widgets.krateo.io/v1alpha1
 kind: Row
 metadata:
   name: two
@@ -40,7 +40,7 @@ spec:
     - name: four
       namespace: demo-system
 ---
-apiVersion: layout.ui.krateo.io/v1alpha1
+apiVersion: widgets.krateo.io/v1alpha1
 kind: Column
 metadata:
   name: three
@@ -53,7 +53,7 @@ spec:
     - name: three
       namespace: demo-system
 ---
-apiVersion: layout.ui.krateo.io/v1alpha1
+apiVersion: widgets.krateo.io/v1alpha1
 kind: Column
 metadata:
   name: four
@@ -79,7 +79,7 @@ metadata:
   namespace: demo-system
 rules:
 - apiGroups:
-  - layout.ui.krateo.io
+  - widgets.krateo.io
   resources:
   - rows
   - columns
@@ -101,7 +101,7 @@ subjects:
   name: devs
   apiGroup: rbac.authorization.k8s.io
 ---
-apiVersion: widgets.ui.krateo.io/v1alpha1
+apiVersion: widgets.krateo.io/v1alpha1
 kind: CardTemplate
 metadata:
   name: fireworksapp-tgz
@@ -115,7 +115,7 @@ spec:
   formTemplateRef:
     name: fireworksapp-tgz
 ---
-apiVersion: widgets.ui.krateo.io/v1alpha1
+apiVersion: widgets.krateo.io/v1alpha1
 kind: CardTemplate
 metadata:
   name: postgresql-tgz
@@ -129,7 +129,7 @@ spec:
   formTemplateRef:
     name: postgresql-tgz
 ---
-apiVersion: widgets.ui.krateo.io/v1alpha1
+apiVersion: widgets.krateo.io/v1alpha1
 kind: CardTemplate
 metadata:
   name: redis-oci
@@ -143,7 +143,7 @@ spec:
   formTemplateRef:
     name: redis-oci
 ---
-apiVersion: widgets.ui.krateo.io/v1alpha1
+apiVersion: widgets.krateo.io/v1alpha1
 kind: CardTemplate
 metadata:
   name: jenkins-repo
@@ -166,7 +166,7 @@ metadata:
 stringData:
   server-url: https://dummyjson.com
 ---
-apiVersion: widgets.ui.krateo.io/v1alpha1
+apiVersion: widgets.krateo.io/v1alpha1
 kind: CardTemplate
 metadata:
   name: three
@@ -198,7 +198,7 @@ metadata:
   namespace: demo-system
 rules:
 - apiGroups:
-  - widgets.ui.krateo.io
+  - widgets.krateo.io
   resources:
   - cardtemplates
   verbs:
@@ -219,7 +219,7 @@ subjects:
   name: devs
   apiGroup: rbac.authorization.k8s.io
 ---
-apiVersion: widgets.ui.krateo.io/v1alpha1
+apiVersion: widgets.krateo.io/v1alpha1
 kind: FormTemplate
 metadata:
   name: fireworksapp-tgz
@@ -229,7 +229,7 @@ spec:
     name: fireworksapp-tgz
     namespace: demo-system
 ---
-apiVersion: widgets.ui.krateo.io/v1alpha1
+apiVersion: widgets.krateo.io/v1alpha1
 kind: FormTemplate
 metadata:
   name: postgresql-tgz
@@ -239,7 +239,7 @@ spec:
     name: postgresql-tgz
     namespace: demo-system
 ---
-apiVersion: widgets.ui.krateo.io/v1alpha1
+apiVersion: widgets.krateo.io/v1alpha1
 kind: FormTemplate
 metadata:
   name: redis-oci
@@ -249,7 +249,7 @@ spec:
     name: redis-oci
     namespace: demo-system
 ---
-apiVersion: widgets.ui.krateo.io/v1alpha1
+apiVersion: widgets.krateo.io/v1alpha1
 kind: FormTemplate
 metadata:
   name: jenkins-repo
@@ -266,7 +266,7 @@ metadata:
   namespace: demo-system
 rules:
 - apiGroups:
-  - widgets.ui.krateo.io
+  - widgets.krateo.io
   resources:
   - formtemplates
   resourceNames:
@@ -298,7 +298,7 @@ metadata:
   namespace: demo-system
 rules:
 - apiGroups:
-  - widgets.ui.krateo.io
+  - widgets.krateo.io
   resources:
   - cardtemplates
   resourceNames:
