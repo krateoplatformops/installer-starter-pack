@@ -114,6 +114,7 @@ spec:
     content: This template creates an instance of Fireworksapp composition
   formTemplateRef:
     name: fireworksapp-tgz
+    namespace: demo-system
 ---
 apiVersion: widgets.krateo.io/v1alpha1
 kind: CardTemplate
@@ -128,6 +129,7 @@ spec:
     content: This template creates an instance of PostgreSQL composition
   formTemplateRef:
     name: postgresql-tgz
+    namespace: demo-system
 ---
 apiVersion: widgets.krateo.io/v1alpha1
 kind: CardTemplate
@@ -142,6 +144,7 @@ spec:
     content: This template creates an instance of Redis composition
   formTemplateRef:
     name: redis-oci
+    namespace: demo-system
 ---
 apiVersion: widgets.krateo.io/v1alpha1
 kind: CardTemplate
@@ -156,6 +159,7 @@ spec:
     content: This template creates an instance of Jenkins composition
   formTemplateRef:
     name: jenkins-repo
+    namespace: demo-system
 ---
 apiVersion: v1
 kind: Secret
@@ -181,6 +185,7 @@ spec:
     tags: ${ .brand }
   formTemplateRef:
     name: fireworksapp-tgz
+    namespace: demo-system
   api:
   - name: api1
     path: "/products"
