@@ -341,6 +341,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
   name: devs-get-list-any-compositiondefinitions-in-demosystem-namespace
+  namespace: demo-system
 rules:
 - apiGroups:
   - core.krateo.io
@@ -354,6 +355,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: devs-get-list-any-compositiondefinitions-in-demosystem-namespace
+  namespace: demo-system
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
