@@ -35,28 +35,32 @@ metadata:
   namespace: demo-system
 spec:
   columnListRef:
-    - name: three
+    - name: static-external-internal-api
       namespace: demo-system
-    - name: four
+    - name: two-cardtemplates
       namespace: demo-system
 ---
 apiVersion: widgets.krateo.io/v1alpha1
 kind: Column
 metadata:
-  name: three
+  name: static-external-internal-api
   namespace: demo-system
 spec:
   app:
     props:
       width: "12"
   cardTemplateListRef:
-    - name: three
+    - name: static
+      namespace: demo-system
+    - name: external-api
+      namespace: demo-system
+    - name: internal-api
       namespace: demo-system
 ---
 apiVersion: widgets.krateo.io/v1alpha1
 kind: Column
 metadata:
-  name: four
+  name: two-cardtemplates
   namespace: demo-system
 spec:
   app:
@@ -67,39 +71,6 @@ spec:
       namespace: demo-system
     - name: postgresql-tgz
       namespace: demo-system
-    # - name: redis-oci
-    #   namespace: demo-system
-    # - name: jenkins-repo
-    #   namespace: demo-system
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
-metadata:
-  name: dev-get-list-any-layout-in-demosystem-namespace
-  namespace: demo-system
-rules:
-- apiGroups:
-  - widgets.krateo.io
-  resources:
-  - rows
-  - columns
-  verbs:
-  - get
-  - list
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
-metadata:
-  name: dev-get-list-any-layout-in-demosystem-namespace
-  namespace: demo-system
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: Role
-  name: dev-get-list-any-layout-in-demosystem-namespace
-subjects:
-- kind: Group
-  name: devs
-  apiGroup: rbac.authorization.k8s.io
 ---
 apiVersion: widgets.krateo.io/v1alpha1
 kind: CardTemplate
@@ -134,95 +105,81 @@ spec:
 apiVersion: widgets.krateo.io/v1alpha1
 kind: CardTemplate
 metadata:
-  name: redis-oci
+  name: static
   namespace: demo-system
 spec:
-  app:
-    icon: fa-solid fa-truck-fast
-    color: green
-    title: Redis Template
-    content: This template creates an instance of Redis composition
   formTemplateRef:
-    name: redis-oci
+    name: fireworksapp
     namespace: demo-system
----
-apiVersion: widgets.krateo.io/v1alpha1
-kind: CardTemplate
-metadata:
-  name: jenkins-repo
-  namespace: demo-system
-spec:
   app:
-    icon: fa-solid fa-truck-fast
-    color: green
-    title: Jenkins Template
-    content: This template creates an instance of Jenkins composition
-  formTemplateRef:
-    name: jenkins-repo
-    namespace: demo-system
+    color: red
+    title: Lorem Ipsum
+    content: |-
+      Nulla quam lectus, venenatis at nunc nec, suscipit convallis sapien.
+      Suspendisse id venenatis orci, a semper ante.
+      Mauris convallis sagittis tincidunt.
+      Aenean egestas auctor interdum.
+    tags: lorem,ipsum
 ---
 apiVersion: v1
 kind: Secret
 type: Opaque
 metadata:
-  name: dummyjson-endpoint
+  name: typicode-endpoint
   namespace: demo-system
 stringData:
-  server-url: https://dummyjson.com
+  server-url: https://jsonplaceholder.typicode.com
 ---
 apiVersion: widgets.krateo.io/v1alpha1
 kind: CardTemplate
 metadata:
-  name: three
+  name: external-api
   namespace: demo-system
 spec:
-  iterator: .api1.products[:3]
-  app:
-    icon: fa-solid fa-mobile-button
-    color: blue
-    title: ${ .title }
-    content: ${ .description }
-    tags: ${ .brand }
   formTemplateRef:
-    name: fireworksapp-tgz
+    name: fireworksapp
     namespace: demo-system
+  app:
+    title: ${ .api2.items[0] | (.name  + " -> " + .email) }
+    content: ${ .api2.items[0].body }
   api:
   - name: api1
-    path: "/products"
+    path: "/todos/1"
     endpointRef:
-      name: dummyjson-endpoint
+      name: typicode-endpoint
+      namespace: demo-system
+    verb: GET
+    headers:
+    - 'Accept: application/json'
+  - name: api2
+    dependOn: api1
+    path: ${ "/todos/" + (.api1.id|tostring) +  "/comments" }
+    endpointRef:
+      name: typicode-endpoint
       namespace: demo-system
     verb: GET
     headers:
     - 'Accept: application/json'
 ---
-apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
+apiVersion: widgets.krateo.io/v1alpha1
+kind: CardTemplate
 metadata:
-  name: dev-get-list-any-cardtemplate-in-demosystem-namespace
+  name: internal-api
   namespace: demo-system
-rules:
-- apiGroups:
-  - widgets.krateo.io
-  resources:
-  - cardtemplates
-  verbs:
-  - get
-  - list
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
-metadata:
-  name: dev-get-list-any-cardtemplate-in-demosystem-namespace
-  namespace: demo-system
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: Role
-  name: dev-get-list-any-cardtemplate-in-demosystem-namespace
-subjects:
-- kind: Group
-  name: devs
-  apiGroup: rbac.authorization.k8s.io
+spec:
+  formTemplateRef:
+    name: fireworksapp
+    namespace: demo-system
+  iterator: .allPods.items[:5]
+  app:
+    title: ${ .metadata.name }
+    content: ${ .spec.containers[0] | .image }
+  api:
+  - name: allPods
+    path: "/api/v1/pods"
+    verb: GET
+    headers:
+    - 'Accept: application/json'
 ---
 apiVersion: widgets.krateo.io/v1alpha1
 kind: FormTemplate
@@ -243,118 +200,6 @@ spec:
   compositionDefinitionRef:
     name: postgresql-tgz
     namespace: demo-system
----
-apiVersion: widgets.krateo.io/v1alpha1
-kind: FormTemplate
-metadata:
-  name: redis-oci
-  namespace: demo-system
-spec:
-  compositionDefinitionRef:
-    name: redis-oci
-    namespace: demo-system
----
-apiVersion: widgets.krateo.io/v1alpha1
-kind: FormTemplate
-metadata:
-  name: jenkins-repo
-  namespace: demo-system
-spec:
-  compositionDefinitionRef:
-    name: jenkins-repo
-    namespace: demo-system
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
-metadata:
-  name: dev-get-formtemplates-in-demosystem-namespace
-  namespace: demo-system
-rules:
-- apiGroups:
-  - widgets.krateo.io
-  resources:
-  - formtemplates
-  resourceNames:
-  - fireworksapp-tgz
-  - postgresql-tgz
-  - redis-oci
-  - jenkins-repo
-  verbs:
-  - get
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
-metadata:
-  name: dev-get-formtemplates-in-demosystem-namespace
-  namespace: demo-system
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: Role
-  name: dev-get-formtemplates-in-demosystem-namespace
-subjects:
-- kind: Group
-  name: devs
-  apiGroup: rbac.authorization.k8s.io
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
-metadata:
-  name: dev-delete-cardtemplate-postgresql-tgz-in-demosystem-namespace
-  namespace: demo-system
-rules:
-- apiGroups:
-  - widgets.krateo.io
-  resources:
-  - cardtemplates
-  resourceNames:
-  - postgresql-tgz
-  verbs:
-  - delete
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
-metadata:
-  name: dev-delete-cardtemplate-postgresql-tgz-in-demosystem-namespace
-  namespace: demo-system
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: Role
-  name: dev-delete-cardtemplate-postgresql-tgz-in-demosystem-namespace
-subjects:
-- kind: Group
-  name: devs
-  apiGroup: rbac.authorization.k8s.io
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
-metadata:
-  name: dev-create-formtemplates-in-demosystem-namespace
-  namespace: demo-system
-rules:
-- apiGroups:
-  - composition.krateo.io
-  resources:
-  - fireworksapps
-  - jenkins
-  - postgresqls
-  - redis
-  verbs:
-  - create
-  - update
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
-metadata:
-  name: dev-create-formtemplates-in-demosystem-namespace
-  namespace: demo-system
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: Role
-  name: dev-create-formtemplated-in-demosystem-namespace
-subjects:
-- kind: Group
-  name: devs
-  apiGroup: rbac.authorization.k8s.io
 ---
 apiVersion: core.krateo.io/v1alpha1
 kind: CompositionDefinition
@@ -377,36 +222,96 @@ metadata:
 spec:
   chart:
     url: https://github.com/krateoplatformops/krateo-v2-template-fireworksapp/releases/download/0.1.0/fireworks-app-0.1.0.tgz
-# ---
-# apiVersion: core.krateo.io/v1alpha1
-# kind: CompositionDefinition
-# metadata:
-#   annotations:
-#      "krateo.io/connector-verbose": "true"
-#   name: redis-oci
-#   namespace: demo-system
-# spec:
-#   chart:
-#     url: oci://registry-1.docker.io/bitnamicharts/redis
-#     version: 19.1.0
-# ---
-# apiVersion: core.krateo.io/v1alpha1
-# kind: CompositionDefinition
-# metadata:
-#   annotations:
-#      "krateo.io/connector-verbose": "true"
-#   name: jenkins-repo
-#   namespace: demo-system
-# spec:
-#   chart:
-#     url: https://charts.krateo.io
-#     version: 10.2.4
-#     repo: jenkins
 ---
 apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
+kind: Role
 metadata:
-  name: compositions-admin
+  name: devs-get-list-any-widget-in-demosystem-namespace
+  namespace: demo-system
+rules:
+- apiGroups:
+  - widgets.krateo.io
+  resources:
+  - '*'
+  verbs:
+  - get
+  - list
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: devs-get-list-any-widget-in-demosystem-namespace
+  namespace: demo-system
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: devs-get-list-any-widget-in-demosystem-namespace
+subjects:
+- kind: Group
+  name: devs
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: devs-delete-cardtemplate-postgresql-tgz-in-demosystem-namespace
+  namespace: demo-system
+rules:
+- apiGroups:
+  - widgets.krateo.io
+  resources:
+  - cardtemplates
+  resourceNames:
+  - postgresql-tgz
+  verbs:
+  - delete
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: devs-delete-cardtemplate-postgresql-tgz-in-demosystem-namespace
+  namespace: demo-system
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: devs-delete-cardtemplate-postgresql-tgz-in-demosystem-namespace
+subjects:
+- kind: Group
+  name: devs
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: devs-create-formtemplates-in-demosystem-namespace
+  namespace: demo-system
+rules:
+- apiGroups:
+  - composition.krateo.io
+  resources:
+  - fireworksapps
+  verbs:
+  - create
+  - update
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: devs-create-formtemplates-in-demosystem-namespace
+  namespace: demo-system
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: devs-create-formtemplates-in-demosystem-namespace
+subjects:
+- kind: Group
+  name: devs
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: devs-get-list-create-any-composition-in-demosystem-namespace
 rules:
 - apiGroups:
   - composition.krateo.io
@@ -418,13 +323,94 @@ rules:
   - create
 ---
 apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRoleBinding
+kind: RoleBinding
 metadata:
-  name: compositions-admin
+  name: devs-get-list-create-any-composition-in-demosystem-namespace
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: devs-get-list-create-any-composition-in-demosystem-namespace
+subjects:
+- kind: Group
+  name: devs
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: devs-get-list-any-compositiondefinitions-in-demosystem-namespace
+rules:
+- apiGroups:
+  - core.krateo.io
+  resources:
+  - compositiondefinitions
+  verbs:
+  - get
+  - list
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: devs-get-list-any-compositiondefinitions-in-demosystem-namespace
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name:  compositions-admin
+  name: devs-get-list-any-compositiondefinitions-in-demosystem-namespace
+subjects:
+- kind: Group
+  name: devs
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: devs-get-list-any-customresourcedefinitions-in-cluster
+rules:
+- apiGroups:
+  - apiextensions.k8s.io
+  resources:
+  - customresourcedefinitions
+  verbs:
+  - get
+  - list
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: devs-get-list-any-customresourcedefinitions-in-cluster
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: devs-get-list-any-customresourcedefinitions-in-cluster
+subjects:
+- kind: Group
+  name: devs
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: devs-get-list-any-secrets-and-configmaps-in-demosystem-namespace
+  namespace: demo-system
+rules:
+- apiGroups:
+  - ''
+  resources:
+  - secrets
+  - configmaps
+  verbs:
+  - get
+  - list
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: devs-get-list-any-secrets-and-configmaps-in-demosystem-namespace
+  namespace: demo-system
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: devs-get-list-any-secrets-and-configmaps-in-demosystem-namespace
 subjects:
 - kind: Group
   name: devs
