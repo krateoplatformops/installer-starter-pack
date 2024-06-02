@@ -354,7 +354,7 @@ metadata:
   name: devs-get-list-any-compositiondefinitions-in-demosystem-namespace
 roleRef:
   apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
+  kind: Role
   name: devs-get-list-any-compositiondefinitions-in-demosystem-namespace
 subjects:
 - kind: Group
