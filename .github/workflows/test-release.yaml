@@ -14,7 +14,7 @@ jobs:
         uses: tdemin/find-latest-tag@v1
         id: app_version
         with:
-          repo: https://${{ secrets.HELM_CHARTS_BOT }}@github.com/krateoplatformops/installer.git
+          repo: https://${{ secrets.HELM_CHARTS_BOT }}@github.com/krateoplatformops/installer-starter-pack.git
 
       - name: Print latest App Version
         run: echo ${{ steps.app_version.outputs.tag }}
@@ -24,9 +24,6 @@ jobs:
 
       - name: Replace Version in Chart.yaml
         run: sed -i 's/CHART_VERSION/${{ steps.app_version.outputs.tag }}/g' ./chart/Chart.yaml
-
-      - name: Replace App Version in Chart.yaml
-        run: sed -i 's/APP_VERSION/${{ steps.app_version.outputs.tag }}/g' ./chart/Chart.yaml
 
       - name: Set up Helm
         uses: azure/setup-helm@v4.1.0
