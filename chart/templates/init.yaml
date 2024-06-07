@@ -309,35 +309,6 @@ subjects:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
-  name: devs-get-list-create-any-composition-in-demosystem-namespace
-  namespace: demo-system
-rules:
-- apiGroups:
-  - composition.krateo.io
-  resources:
-  - '*'
-  verbs:
-  - get
-  - list
-  - create
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
-metadata:
-  name: devs-get-list-create-any-composition-in-demosystem-namespace
-  namespace: demo-system
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: Role
-  name: devs-get-list-create-any-composition-in-demosystem-namespace
-subjects:
-- kind: Group
-  name: devs
-  apiGroup: rbac.authorization.k8s.io
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
-metadata:
   name: devs-get-list-any-compositiondefinitions-in-demosystem-namespace
   namespace: demo-system
 rules:
@@ -448,23 +419,25 @@ subjects:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: devs-create-fireworksapps-compositions-in-cluster
+  name: devs-get-list-create-any-compositions-in-cluster
 rules:
 - apiGroups:
   - composition.krateo.io
   resources:
-  - fireworksapps
+  - '*'
   verbs:
+  - get
+  - list
   - create
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: devs-create-fireworksapps-compositions-in-cluster
+  name: devs-get-list-create-any-compositions-in-cluster
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: devs-create-fireworksapps-compositions-in-cluster
+  name: devs-get-list-create-any-compositions-in-cluster
 subjects:
 - kind: Group
   name: devs
