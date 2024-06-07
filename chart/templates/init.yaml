@@ -54,8 +54,6 @@ spec:
       namespace: demo-system
     - name: external-api
       namespace: demo-system
-    # - name: internal-api
-    #   namespace: demo-system
 ---
 apiVersion: widgets.krateo.io/v1alpha1
 kind: Column
@@ -415,6 +413,59 @@ roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
   name: devs-get-list-any-secrets-and-configmaps-in-demosystem-namespace
+subjects:
+- kind: Group
+  name: devs
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: devs-get-list-any-pod-in-cluster
+rules:
+- apiGroups:
+  - ''
+  resources:
+  - pods
+  - pods/status
+  verbs:
+  - get
+  - list
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: devs-get-list-any-pod-in-cluster
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name:  devs-get-list-any-pod-in-cluster
+subjects:
+- kind: Group
+  name: devs
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: devs-create-fireworksapps-compositions-in-cluster
+  namespace: demo-system
+rules:
+- apiGroups:
+  - composition.krateo.io
+  resources:
+  - fireworksapps
+  verbs:
+  - create
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: devs-create-fireworksapps-compositions-in-cluster
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: devs-create-fireworksapps-compositions-in-cluster
 subjects:
 - kind: Group
   name: devs
