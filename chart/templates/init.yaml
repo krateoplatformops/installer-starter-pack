@@ -54,8 +54,8 @@ spec:
       namespace: demo-system
     - name: external-api
       namespace: demo-system
-    - name: internal-api
-      namespace: demo-system
+    # - name: internal-api
+    #   namespace: demo-system
 ---
 apiVersion: widgets.krateo.io/v1alpha1
 kind: Column
