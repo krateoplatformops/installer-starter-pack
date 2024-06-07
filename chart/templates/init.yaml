@@ -449,7 +449,6 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   name: devs-create-fireworksapps-compositions-in-cluster
-  namespace: demo-system
 rules:
 - apiGroups:
   - composition.krateo.io
@@ -464,7 +463,7 @@ metadata:
   name: devs-create-fireworksapps-compositions-in-cluster
 roleRef:
   apiGroup: rbac.authorization.k8s.io
-  kind: Role
+  kind: ClusterRole
   name: devs-create-fireworksapps-compositions-in-cluster
 subjects:
 - kind: Group
